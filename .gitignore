@@ -1,0 +1,31 @@
+# OS / editor
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Environment variables — never commit secrets
+.env
+.env.*
+!**/.env.example
+
+# Dependencies
+node_modules/
+vendor/
+
+# Frontend build output
+frontend/dist/
+
+# Laravel runtime / cache / logs
+backend/storage/*.key
+backend/bootstrap/cache/*.php
+backend/storage/logs/*.log
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/framework/views/*
+!backend/storage/framework/cache/data/.gitignore
+!backend/storage/framework/sessions/.gitignore
+!backend/storage/framework/testing/.gitignore
+!backend/storage/framework/views/.gitignore
+backend/.phpunit.result.cache
