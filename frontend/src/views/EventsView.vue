@@ -7,24 +7,18 @@ import { events } from '../content/events'
 
 <template>
   <DefaultLayout>
-    <section class="section container">
+    <section class="section container px-5">
       <SectionTitle
         title="Настани"
         subtitle="Настани и работилници организирани од Велина Реформер."
         align="center"
+        v-reveal
       />
-      <div class="events-list">
-        <EventCard v-for="event in events" :key="event.id" :event="event" />
+      <div class="row g-4 justify-content-center">
+        <div v-for="(event, index) in events" :key="event.id" class="col-12 col-lg-10 col-xl-8">
+          <EventCard :event="event" :reveal-delay="index * 80" />
+        </div>
       </div>
     </section>
   </DefaultLayout>
 </template>
-
-<style scoped>
-.events-list {
-  display: grid;
-  gap: var(--space-lg);
-  max-width: 900px;
-  margin: 0 auto;
-}
-</style>

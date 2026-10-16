@@ -3,60 +3,100 @@
 // src/content/pages.js for why content lives here instead of the database).
 //
 // To add a real event:
-//   1. Create frontend/public/events/<event-slug>/ and drop 3-5 photos in it
-//      (mirrors how frontend/public/gallery/ holds the gallery photos).
+//   1. Create frontend/public/events/<event-slug>/ and drop 3-5 photos in it,
+//      named 1.jpg, 2.jpg, 3.jpg... in display order (mirrors how
+//      frontend/public/gallery/ holds the gallery photos).
 //   2. Add an entry below with a title, date (YYYY-MM-DD), a short
-//      description, and an `images` array (3-5 entries) pointing at those
-//      photos. Each image needs a human-readable `alt` — it's read aloud by
-//      screen readers and shown if the photo fails to load.
-//   3. New entries are shown in the order they appear in this array — put
-//      the most recent event first.
+//      description, and an `images` array pointing at those photos in order.
+//      Each image needs a human-readable `alt` — it's read aloud by screen
+//      readers and shown if the photo fails to load.
+//   3. Entries are shown in the order they appear in this array — put the
+//      most recent event first.
 //
-// [Placeholder] marks copy/photos below that still need the client's real
-// event details — these entries borrow existing gallery photos as stand-ins
-// so the "Настани" page layout can be previewed before real content exists.
+// Photos are real, taken from frontend/public/events/<folder>/. Dates and
+// descriptions are still empty — the card hides them until they're filled in.
 
 export const events = [
   {
     id: 1,
-    title: '[Placeholder] Прослава на годишнина од отворањето',
-    date: '2026-07-04',
-    description:
-      '[Placeholder] Краток опис на настанот — што се случуваше, кој учествуваше и зошто беше посебен за студиото. Ќе биде заменето со вистинската содржина од клиентот.',
+    title: 'Velina x HUMN',
+    date: null,
+    description: '',
     images: [
-      { url: '/gallery/kako%20funkc.jpg', alt: 'Прослава на годишнина од отворањето — фотографија 1' },
-      { url: '/gallery/meet%20d%201.jpg', alt: 'Прослава на годишнина од отворањето — фотографија 2' },
-      { url: '/gallery/meet%20daniela.jpg', alt: 'Прослава на годишнина од отворањето — фотографија 3' },
-      { url: '/gallery/mentalni%20pridobivki.jpg', alt: 'Прослава на годишнина од отворањето — фотографија 4' },
-      { url: '/gallery/programi%20i%20treninzi.jpg', alt: 'Прослава на годишнина од отворањето — фотографија 5' },
+      { url: '/events/event%201%20humn%20park/1.jpg', alt: 'Humn Park — фотографија 1' },
+      { url: '/events/event%201%20humn%20park/2.jpg', alt: 'Humn Park — фотографија 2' },
+      { url: '/events/event%201%20humn%20park/3.jpg', alt: 'Humn Park — фотографија 3' },
+      { url: '/events/event%201%20humn%20park/4.jpg', alt: 'Humn Park — фотографија 4' },
+      { url: '/events/event%201%20humn%20park/5.jpg', alt: 'Humn Park — фотографија 5' },
     ],
     sort_order: 1,
   },
   {
     id: 2,
-    title: '[Placeholder] Отворен ден во студиото',
-    date: '2026-05-16',
-    description:
-      '[Placeholder] Краток опис на настанот — што се случуваше, кој учествуваше и зошто беше посебен за студиото. Ќе биде заменето со вистинската содржина од клиентот.',
+    title: 'Velina Spring Garden Session',
+    date: null,
+    description: '',
     images: [
-      { url: '/gallery/1.jpg', alt: 'Отворен ден во студиото — фотографија 1' },
-      { url: '/gallery/balance.jpg', alt: 'Отворен ден во студиото — фотографија 2' },
-      { url: '/gallery/focus.jpg', alt: 'Отворен ден во студиото — фотографија 3' },
-      { url: '/gallery/control.jpg', alt: 'Отворен ден во студиото — фотографија 4' },
+      { url: '/events/event%202%20ilovica/4.jpg', alt: 'Velina Spring Garden Session — фотографија 1' },
+      { url: '/events/event%202%20ilovica/2.jpg', alt: 'Velina Spring Garden Session — фотографија 2' },
+      { url: '/events/event%202%20ilovica/3.jpg', alt: 'Velina Spring Garden Session — фотографија 3' },
+      { url: '/events/event%202%20ilovica/1.jpg', alt: 'Velina Spring Garden Session — фотографија 4' },
+      { url: '/events/event%202%20ilovica/5.jpg', alt: 'Velina Spring Garden Session — фотографија 5' },
     ],
     sort_order: 2,
   },
   {
     id: 3,
-    title: '[Placeholder] Работилница за правилно дишење и техника',
-    date: '2026-03-10',
-    description:
-      '[Placeholder] Краток опис на настанот — што се случуваше, кој учествуваше и зошто беше посебен за студиото. Ќе биде заменето со вистинската содржина од клиентот.',
+    title: 'Velina Mindful Morning',
+    date: null,
+    description: '',
     images: [
-      { url: '/gallery/11.jpg', alt: 'Работилница за правилно дишење и техника — фотографија 1' },
-      { url: '/gallery/end.jpg', alt: 'Работилница за правилно дишење и техника — фотографија 2' },
-      { url: '/gallery/pt1.jpg', alt: 'Работилница за правилно дишење и техника — фотографија 3' },
+      { url: '/events/event%203%20so%20joga/1.jpg', alt: 'Velina Mindful Morning — фотографија 1' },
+      { url: '/events/event%203%20so%20joga/2.jpg', alt: 'Velina Mindful Morning — фотографија 2' },
+      { url: '/events/event%203%20so%20joga/3.jpg', alt: 'Velina Mindful Morning — фотографија 3' },
+      { url: '/events/event%203%20so%20joga/4.jpg', alt: 'Velina Mindful Morning — фотографија 4' },
     ],
     sort_order: 3,
+  },
+  {
+    id: 4,
+    title: "Velina's Summer Glow Experience",
+    date: null,
+    description: '',
+    images: [
+      { url: '/events/event%204%20vila%20roni/1.jpg', alt: "Velina's Summer Glow Experience — фотографија 1" },
+      { url: '/events/event%204%20vila%20roni/2.jpg', alt: "Velina's Summer Glow Experience — фотографија 2" },
+      { url: '/events/event%204%20vila%20roni/3.jpg', alt: "Velina's Summer Glow Experience — фотографија 3" },
+      { url: '/events/event%204%20vila%20roni/4.jpg', alt: "Velina's Summer Glow Experience — фотографија 4" },
+      { url: '/events/event%204%20vila%20roni/5.jpg', alt: "Velina's Summer Glow Experience — фотографија 5" },
+    ],
+    sort_order: 4,
+  },
+  {
+    id: 5,
+    title: 'Aquapilates with Velina',
+    date: null,
+    description: '',
+    images: [
+      { url: '/events/event%205%20aquapilates/1.jpg', alt: 'Aquapilates with Velina — фотографија 1' },
+      { url: '/events/event%205%20aquapilates/2.jpg', alt: 'Aquapilates with Velina — фотографија 2' },
+      { url: '/events/event%205%20aquapilates/3.jpg', alt: 'Aquapilates with Velina — фотографија 3' },
+      { url: '/events/event%205%20aquapilates/4.jpg', alt: 'Aquapilates with Velina — фотографија 4' },
+      { url: '/events/event%205%20aquapilates/5.jpg', alt: 'Aquapilates with Velina — фотографија 5' },
+    ],
+    sort_order: 5,
+  },
+  {
+    id: 6,
+    title: 'Velina Poolside Sunset Session',
+    date: null,
+    description: '',
+    images: [
+      { url: '/events/event%206%20lebedovo%20ezero/1.jpg', alt: 'Velina Poolside Sunset Session — фотографија 1' },
+      { url: '/events/event%206%20lebedovo%20ezero/2.jpg', alt: 'Velina Poolside Sunset Session — фотографија 2' },
+      { url: '/events/event%206%20lebedovo%20ezero/3.jpg', alt: 'Velina Poolside Sunset Session — фотографија 3' },
+      { url: '/events/event%206%20lebedovo%20ezero/4.jpg', alt: 'Velina Poolside Sunset Session — фотографија 4' },
+    ],
+    sort_order: 6,
   },
 ]

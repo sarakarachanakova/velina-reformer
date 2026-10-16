@@ -44,6 +44,12 @@ const routes = [
     component: () => import('../views/ContactView.vue'),
     meta: { title: 'Контакт | Велина Реформер' },
   },
+  {
+    path: '/event1',
+    name: 'event1',
+    component: () => import('../views/Event1View.vue'),
+    meta: { title: '[Placeholder] Настан | Велина Реформер' },
+  },
 ]
 
 const router = createRouter({

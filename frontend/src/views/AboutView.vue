@@ -8,27 +8,27 @@ const page = pages.about
 
 <template>
   <DefaultLayout>
-    <section class="section container" v-if="page">
-      <SectionTitle :title="page.title" />
+    <section class="section container px-5" v-if="page">
+      <SectionTitle :title="page.title" v-reveal />
 
       <div class="row">
         <div class="col-lg-8">
-          <div class="mb-4">
+          <div class="mb-4" v-reveal>
             <h3>Нашата приказна</h3>
             <p class="text-justify">{{ page.content.story }}</p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" v-reveal>
             <h3>Нашата филозофија</h3>
             <p class="text-justify">{{ page.content.philosophy }}</p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" v-reveal>
             <h3>Нашата мисија</h3>
             <p class="text-justify">{{ page.content.mission }}</p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" v-reveal>
             <h3>Што нè прави различни</h3>
             <p class="text-justify">{{ page.content.difference }}</p>
           </div>

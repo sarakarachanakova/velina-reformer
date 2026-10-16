@@ -28,6 +28,7 @@ function closeMenu() {
 
       <button
         class="navbar__toggle"
+        :class="{ 'navbar__toggle--open': isOpen }"
         type="button"
         :aria-expanded="isOpen"
         aria-label="Toggle navigation menu"
@@ -96,16 +97,33 @@ function closeMenu() {
 .navbar__toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
-  padding: 0.5rem;
+  padding: 0.6rem;
 }
 
 .navbar__toggle span {
   width: 24px;
   height: 2px;
   background: var(--color-text);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.navbar__toggle--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__toggle--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__toggle--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 @media (max-width: 768px) {
@@ -125,11 +143,13 @@ function closeMenu() {
     border-bottom: 1px solid var(--color-border);
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s ease;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
   }
 
   .navbar__links--open {
     max-height: 400px;
+    opacity: 1;
   }
 
   .navbar__links li {

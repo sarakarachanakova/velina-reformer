@@ -7,8 +7,8 @@ import { gallery } from '../content/gallery'
 
 <template>
   <DefaultLayout>
-    <section class="section container">
-      <SectionTitle title="Галерија | Велина Реформер" align="left" />
+    <section class="section container px-5">
+      <SectionTitle title="Галерија | Велина Реформер" align="left" v-reveal />
       <GalleryGrid :images="gallery" />
     </section>
   </DefaultLayout>

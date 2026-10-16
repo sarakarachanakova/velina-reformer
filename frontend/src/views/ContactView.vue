@@ -10,64 +10,68 @@ const defaultMapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!
 
 <template>
   <DefaultLayout>
-    <section class="section container" v-if="page">
-      <SectionTitle title="Контакт | Велина Реформер" align="left" />
+    <section class="section container px-5" v-if="page">
+      <SectionTitle title="Контакт | Велина Реформер" align="left" v-reveal />
 
-      <div class="contact-grid">
-        <dl class="contact-details">
-          <div class="contact-details__row">
-            <dt>Телефон</dt>
-            <dd>
-              <a :href="`tel:${page.content.phone.replace(/[^+\d]/g, '')}`" @click="trackPhoneClick('contact_page')">{{ page.content.phone }}</a>
-            </dd>
-          </div>
-          <div class="contact-details__row">
-            <dt>Е-пошта</dt>
-            <dd>
-              <a :href="`mailto:${page.content.email}`" @click="trackContactClick('contact_page_email')">{{ page.content.email }}</a>
-            </dd>
-          </div>
-          <div class="contact-details__row">
-            <dt>Адреса</dt>
-            <dd>
-              {{ page.content.address }}
-              <template v-if="page.content.mapsUrl">
-                ·
-                <a :href="page.content.mapsUrl" target="_blank" rel="noopener" @click="trackMapsClick('contact_page')"
-                  >Отвори во Google Maps</a
+      <div class="row g-4">
+        <div class="col-12 col-lg-6" v-reveal>
+          <dl class="contact-details">
+            <div class="contact-details__row">
+              <dt>Телефон</dt>
+              <dd>
+                <a :href="`tel:${page.content.phone.replace(/[^+\d]/g, '')}`" @click="trackPhoneClick('contact_page')">{{ page.content.phone }}</a>
+              </dd>
+            </div>
+            <div class="contact-details__row">
+              <dt>Е-пошта</dt>
+              <dd>
+                <a :href="`mailto:${page.content.email}`" @click="trackContactClick('contact_page_email')">{{ page.content.email }}</a>
+              </dd>
+            </div>
+            <div class="contact-details__row">
+              <dt>Адреса</dt>
+              <dd>
+                {{ page.content.address }}
+                <template v-if="page.content.mapsUrl">
+                  ·
+                  <a :href="page.content.mapsUrl" target="_blank" rel="noopener" @click="trackMapsClick('contact_page')"
+                    >Отвори во Google Maps</a
+                  >
+                </template>
+              </dd>
+            </div>
+            <div v-if="page.content.instagram" class="contact-details__row">
+              <dt>Instagram</dt>
+              <dd>
+                <a :href="page.content.instagram" target="_blank" rel="noopener" @click="trackInstagramClick('contact_page')"
+                  >instagram.com/velinareformer</a
                 >
-              </template>
-            </dd>
-          </div>
-          <div v-if="page.content.instagram" class="contact-details__row">
-            <dt>Instagram</dt>
-            <dd>
-              <a :href="page.content.instagram" target="_blank" rel="noopener" @click="trackInstagramClick('contact_page')"
-                >instagram.com/velinareformer</a
-              >
-            </dd>
-          </div>
-          <div v-if="page.content.facebook" class="contact-details__row">
-            <dt>Facebook</dt>
-            <dd><a :href="page.content.facebook" target="_blank" rel="noopener">facebook.com/velinareformer</a></dd>
-          </div>
-          <div v-if="page.content.tiktok" class="contact-details__row">
-            <dt>TikTok</dt>
-            <dd><a :href="page.content.tiktok" target="_blank" rel="noopener">tiktok.com/@velinareformer</a></dd>
-          </div>
-        </dl>
+              </dd>
+            </div>
+            <div v-if="page.content.facebook" class="contact-details__row">
+              <dt>Facebook</dt>
+              <dd><a :href="page.content.facebook" target="_blank" rel="noopener">facebook.com/velinareformer</a></dd>
+            </div>
+            <div v-if="page.content.tiktok" class="contact-details__row">
+              <dt>TikTok</dt>
+              <dd><a :href="page.content.tiktok" target="_blank" rel="noopener">tiktok.com/@velinareformer</a></dd>
+            </div>
+          </dl>
+        </div>
 
-        <div class="contact-map">
-          <iframe
-            :src="page.content.mapEmbedUrl || defaultMapEmbedUrl"
-            width="100%"
-            height="320"
-            style="border: 0"
-            allowfullscreen
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            title="Studio location on Google Maps"
-          ></iframe>
+        <div class="col-12 col-lg-6" v-reveal="120">
+          <div class="contact-map">
+            <iframe
+              :src="page.content.mapEmbedUrl || defaultMapEmbedUrl"
+              width="100%"
+              height="100%"
+              style="border: 0"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              title="Studio location on Google Maps"
+            ></iframe>
+          </div>
         </div>
       </div>
     </section>
@@ -75,10 +79,17 @@ const defaultMapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!
 </template>
 
 <style scoped>
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-lg);
+.contact-map {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-photo);
+}
+
+@media (min-width: 992px) {
+  .contact-map {
+    aspect-ratio: 1 / 1;
+  }
 }
 
 .contact-details__row {
@@ -126,11 +137,5 @@ const defaultMapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!
 
 .contact-details__row a:hover {
   color: var(--color-primary);
-}
-
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

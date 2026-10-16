@@ -4,6 +4,9 @@ import { trackGalleryOpen } from '../utils/analytics'
 
 defineProps({
   images: { type: Array, required: true },
+  // 2 (default) matches the full Gallery page; 3 is used on the landing
+  // page preview for smaller, denser thumbnails on mobile.
+  mobileColumns: { type: Number, default: 2 },
 })
 
 const selectedImage = ref(null)
@@ -22,23 +25,30 @@ function closeImage() {
 </script>
 
 <template>
-  <div class="gallery-grid">
-    <figure v-for="image in images" :key="image.id" class="gallery-grid__item">
-      <button
-        v-if="image.image_url"
-        type="button"
-        class="gallery-grid__image-button"
-        :aria-label="`View ${image.alt_text || image.title} larger`"
-        @click="openImage(image)"
-      >
-        <img
-          :src="image.image_url"
-          :alt="image.alt_text || image.title"
-          loading="lazy"
-        />
-      </button>
-      <div v-else class="gallery-grid__placeholder" aria-hidden="true">
-        {{ image.title }}
+  <div class="row gx-3 gx-md-4">
+    <figure
+      v-for="(image, index) in images"
+      :key="image.id"
+      class="col-md-4 col-lg-3 gallery-grid__col py-4"
+      :class="mobileColumns === 3 ? 'col-4' : 'col-6'"
+    >
+      <div class="gallery-grid__item photo-frame" v-reveal="(index % 6) * 60">
+        <button
+          v-if="image.image_url"
+          type="button"
+          class="gallery-grid__image-button"
+          :aria-label="`View ${image.alt_text || image.title} larger`"
+          @click="openImage(image)"
+        >
+          <img
+            :src="image.image_url"
+            :alt="image.alt_text || image.title"
+            loading="lazy"
+          />
+        </button>
+        <div v-else class="gallery-grid__placeholder" aria-hidden="true">
+          {{ image.title }}
+        </div>
       </div>
     </figure>
   </div>
@@ -62,16 +72,12 @@ function closeImage() {
 </template>
 
 <style scoped>
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-sm);
+.gallery-grid__col {
+  margin: 0;
 }
 
 .gallery-grid__item {
   aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: var(--color-border);
 }
 
 .gallery-grid__image-button {
@@ -87,11 +93,6 @@ function closeImage() {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.gallery-grid__item img:hover {
-  transform: scale(1.04);
 }
 
 .gallery-grid__placeholder {
@@ -116,12 +117,35 @@ function closeImage() {
   padding: var(--space-md);
   background: rgba(20, 25, 20, 0.88);
   outline: none;
+  animation: lightbox-fade-in 0.25s ease both;
 }
 
 .gallery-lightbox img {
   max-width: min(100%, 1100px);
   max-height: calc(100vh - 4rem);
   object-fit: contain;
+  border-radius: var(--radius);
+  animation: lightbox-pop-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes lightbox-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .gallery-lightbox__close {
@@ -141,11 +165,5 @@ function closeImage() {
 
 .gallery-lightbox__close:hover {
   background: rgba(255, 255, 255, 0.15);
-}
-
-@media (max-width: 768px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 </style>

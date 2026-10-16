@@ -8,7 +8,7 @@ defineProps({
 
 <template>
   <section class="cta section">
-    <div class="container cta__inner">
+    <div class="container cta__inner px-5" v-reveal>
       <p>{{ text }}</p>
       <router-link :to="ctaTo" class="btn">{{ ctaLabel }}</router-link>
     </div>

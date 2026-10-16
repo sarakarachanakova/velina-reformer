@@ -3,6 +3,9 @@ import { computed, nextTick, ref } from 'vue'
 
 const props = defineProps({
   event: { type: Object, required: true },
+  // Stagger delay (ms) for the scroll-reveal entrance when several cards
+  // sit in a list — see v-reveal (src/directives/reveal.js).
+  revealDelay: { type: Number, default: 0 },
 })
 
 const photos = computed(() => props.event.images || [])
@@ -31,12 +34,12 @@ function closePhoto() {
 </script>
 
 <template>
-  <article class="event-card">
+  <article class="event-card" v-reveal="revealDelay">
     <div class="event-card__photos">
       <button
         v-if="heroPhoto"
         type="button"
-        class="event-card__hero"
+        class="event-card__hero photo-frame"
         :aria-label="`View ${heroPhoto.alt} larger`"
         @click="openPhoto(heroPhoto)"
       >
@@ -46,24 +49,24 @@ function closePhoto() {
         {{ event.title }}
       </div>
 
-      <div v-if="thumbPhotos.length" class="event-card__thumbs">
-        <button
-          v-for="(photo, index) in thumbPhotos"
-          :key="index"
-          type="button"
-          class="event-card__thumb"
-          :aria-label="`View ${photo.alt} larger`"
-          @click="openPhoto(photo)"
-        >
-          <img :src="photo.url" :alt="photo.alt" loading="lazy" />
-        </button>
+      <div v-if="thumbPhotos.length" class="row g-2 event-card__thumbs">
+        <div v-for="(photo, index) in thumbPhotos" :key="index" class="col-4 col-sm-3">
+          <button
+            type="button"
+            class="event-card__thumb photo-frame"
+            :aria-label="`View ${photo.alt} larger`"
+            @click="openPhoto(photo)"
+          >
+            <img :src="photo.url" :alt="photo.alt" loading="lazy" />
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="event-card__body">
       <span v-if="formattedDate" class="event-card__date">{{ formattedDate }}</span>
       <h3>{{ event.title }}</h3>
-      <p>{{ event.description }}</p>
+      <p v-if="event.description">{{ event.description }}</p>
     </div>
   </article>
 
@@ -89,11 +92,21 @@ function closePhoto() {
 .event-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-photo);
 }
 
 .event-card__photos {
   display: flex;
   flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) 0;
 }
 
 .event-card__hero {
@@ -102,7 +115,6 @@ function closePhoto() {
   aspect-ratio: 16 / 9;
   border: 0;
   padding: 0;
-  background: var(--color-border);
   cursor: zoom-in;
 }
 
@@ -110,11 +122,6 @@ function closePhoto() {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.event-card__hero:hover img {
-  transform: scale(1.03);
 }
 
 .event-card__hero--placeholder {
@@ -125,20 +132,20 @@ function closePhoto() {
   text-align: center;
   font-family: var(--font-heading);
   color: var(--color-text-muted);
+  border-radius: var(--radius);
+  background: var(--color-border);
 }
 
 .event-card__thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-  gap: 2px;
+  margin: 0;
 }
 
 .event-card__thumb {
   display: block;
+  width: 100%;
   aspect-ratio: 1 / 1;
   border: 0;
   padding: 0;
-  background: var(--color-border);
   cursor: zoom-in;
 }
 
@@ -146,11 +153,6 @@ function closePhoto() {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.event-card__thumb:hover img {
-  transform: scale(1.06);
 }
 
 .event-card__body {
@@ -185,12 +187,35 @@ function closePhoto() {
   padding: var(--space-md);
   background: rgba(20, 25, 20, 0.88);
   outline: none;
+  animation: event-lightbox-fade-in 0.25s ease both;
 }
 
 .event-lightbox img {
   max-width: min(100%, 1100px);
   max-height: calc(100vh - 4rem);
   object-fit: contain;
+  border-radius: var(--radius);
+  animation: event-lightbox-pop-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes event-lightbox-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes event-lightbox-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .event-lightbox__close {
@@ -210,11 +235,5 @@ function closePhoto() {
 
 .event-lightbox__close:hover {
   background: rgba(255, 255, 255, 0.15);
-}
-
-@media (max-width: 768px) {
-  .event-card__thumbs {
-    grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
-  }
 }
 </style>

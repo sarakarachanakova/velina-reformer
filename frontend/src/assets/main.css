@@ -39,6 +39,13 @@
 
   /* --- layout --- */
   --container-max: 1200px;
+  /* Side padding for .container / .section — scales with viewport so text
+     and photos always sit clear of the screen edge instead of running
+     edge-to-edge, on phones as much as on desktop. Deliberately bigger
+     than any Bootstrap .row negative gutter margin nested inside it. */
+  --container-pad: clamp(1.5rem, 6vw, 3rem);
+  --radius: 0.85rem;
+  --shadow-photo: 0 10px 30px -12px rgba(43, 51, 44, 0.25);
 }
 
 * {
@@ -49,6 +56,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Sticky navbar height + a little breathing room, so an in-page anchor
+     jump doesn't land flush under the navbar. */
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -58,6 +68,12 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* Momentum scrolling on older iOS Safari; harmless elsewhere. */
+  -webkit-overflow-scrolling: touch;
+  /* Hover-scale on photos/cards and the drifting blobs on Event1View can
+     bleed a few px past the viewport edge — never let that create a
+     horizontal scrollbar, especially on narrow phones. */
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4 {
@@ -107,7 +123,7 @@ button {
 .container {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 var(--space-sm);
+  padding: 0 var(--container-pad);
 }
 
 .section {
@@ -123,12 +139,18 @@ button {
   color: #fff;
   font-size: 0.95rem;
   letter-spacing: 0.03em;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn:hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px rgba(67, 101, 63, 0.55);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn-outline {
@@ -144,5 +166,99 @@ button {
 @media (max-width: 768px) {
   .section {
     padding: var(--space-md) 0;
+  }
+}
+
+/*
+  Photo framing — a consistent "space around photos" treatment used by
+  GalleryGrid / InstructorCard / EventCard: rounded corners, a soft shadow
+  to lift the image off the page, and a gentle zoom on hover/tap so photo
+  grids never read as a flush, edge-to-edge mosaic.
+*/
+.photo-frame {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-border);
+  box-shadow: var(--shadow-photo);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.photo-frame:hover {
+  box-shadow: 0 16px 36px -14px rgba(43, 51, 44, 0.35);
+}
+
+.photo-frame img {
+  transition: transform 0.4s ease;
+}
+
+.photo-frame:hover img {
+  transform: scale(1.05);
+}
+
+/*
+  Scroll-reveal utility — paired with the `v-reveal` directive
+  (src/directives/reveal.js). Elements fade/slide in the first time they
+  cross into the viewport, giving scrolling a soft, animated feel instead
+  of content just snapping into place.
+*/
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/*
+  Page transition — cross-fades route changes (see the <transition name="page">
+  in App.vue). Views aren't kept alive across routes (each one rebuilds its
+  own Navbar/Footer via DefaultLayout), so this softens that full remount
+  into a fade + gentle rise instead of the page just cutting to the next one.
+*/
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .photo-frame,
+  .photo-frame img,
+  .btn {
+    transition: none;
+  }
+
+  .page-enter-active,
+  .page-leave-active {
+    transition: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    opacity: 1;
+    transform: none;
   }
 }

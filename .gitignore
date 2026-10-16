@@ -29,3 +29,7 @@ backend/storage/framework/views/*
 !backend/storage/framework/testing/.gitignore
 !backend/storage/framework/views/.gitignore
 backend/.phpunit.result.cache
+
+
+*.pptx
+frontend/public/other/*

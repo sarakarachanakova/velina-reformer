@@ -6,7 +6,11 @@ import './assets/main.css'
 import App from './App.vue'
 import router from './router'
 import { initAnalytics } from './utils/analytics'
+import { vReveal } from './directives/reveal'
 
 initAnalytics()
 
-createApp(App).use(router).mount('#app')
+createApp(App)
+  .use(router)
+  .directive('reveal', vReveal)
+  .mount('#app')

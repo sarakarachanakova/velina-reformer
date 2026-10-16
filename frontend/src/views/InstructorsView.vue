@@ -7,26 +7,17 @@ import { instructors } from '../content/instructors'
 
 <template>
   <DefaultLayout>
-    <section class="section container">
-      <SectionTitle title="Нашите Инструктори | Велина Реформер" align="left" />
-      <div class="instructors-grid">
-        <InstructorCard v-for="instructor in instructors" :key="instructor.id" :instructor="instructor" />
+    <section class="section container px-5">
+      <SectionTitle title="Нашите Инструктори | Велина Реформер" align="left" v-reveal />
+      <div class="row g-4">
+        <div
+          v-for="(instructor, index) in instructors"
+          :key="instructor.id"
+          class="col-12 col-sm-6 col-lg-4"
+        >
+          <InstructorCard :instructor="instructor" :reveal-delay="index * 80" />
+        </div>
       </div>
     </section>
   </DefaultLayout>
 </template>
-
-<style scoped>
-.instructors-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
-  justify-content: center;
-  gap: var(--space-md);
-}
-
-@media (max-width: 768px) {
-  .instructors-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

@@ -1,12 +1,15 @@
 <script setup>
 defineProps({
   instructor: { type: Object, required: true },
+  // Stagger delay (ms) for the scroll-reveal entrance when several cards
+  // sit in a grid — see v-reveal (src/directives/reveal.js).
+  revealDelay: { type: Number, default: 0 },
 })
 </script>
 
 <template>
-  <article class="instructor-card">
-    <div class="instructor-card__image">
+  <article class="instructor-card" v-reveal="revealDelay">
+    <div class="instructor-card__image photo-frame">
       <img
         v-if="instructor.image_url"
         :src="instructor.image_url"
@@ -18,21 +21,22 @@ defineProps({
       </div>
     </div>
     <h3>{{ instructor.name }}</h3>
-    <p class="instructor-card__role">{{ instructor.role }}</p>
-    <p class="instructor-card__bio">{{ instructor.bio }}</p>
   </article>
 </template>
 
 <style scoped>
 .instructor-card {
   text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.instructor-card:hover {
+  transform: translateY(-4px);
 }
 
 .instructor-card__image {
   aspect-ratio: 3 / 4;
-  background: var(--color-border);
   margin-bottom: var(--space-sm);
-  overflow: hidden;
 }
 
 .instructor-card__image img {
@@ -50,15 +54,5 @@ defineProps({
   font-family: var(--font-heading);
   font-size: 2.5rem;
   color: var(--color-text-muted);
-}
-
-.instructor-card__role {
-  color: var(--color-primary);
-  font-size: 0.9rem;
-  margin-bottom: var(--space-xs);
-}
-
-.instructor-card__bio {
-  font-size: 0.95rem;
 }
 </style>
