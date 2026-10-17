@@ -52,7 +52,7 @@ class PageSeeder extends Seeder
                 'title' => 'Контакт',
                 'content' => [
                     'phone' => '+389 77 503 524',
-                    'email' => 'info@velinareformer.mk',
+                    'email' => 'velinareformer@gmail.com',
                     'address' => 'Струмица, Северна Македонија',
                     'instagram' => 'https://www.instagram.com/velinareformer?igsi=Mmx6Y3o0amo4cDZr',
                     'facebook' => 'https://www.facebook.com/profile.php?id=61582159225800',

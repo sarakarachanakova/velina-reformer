@@ -61,7 +61,7 @@ export const pages = {
     title: 'Контакт | Велина Реформер',
     content: {
       phone: '+389 77 503 524',
-      email: 'info@velinareformer.mk',
+      email: 'velinareformer@gmail.com',
       address: 'Strumica, North Macedonia',
       instagram: 'https://www.instagram.com/velinareformer?igsi=Mmx6Y3o0amo4cDZr',
       facebook: 'https://www.facebook.com/profile.php?id=61582159225800',

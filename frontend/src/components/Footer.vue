@@ -22,7 +22,7 @@ const copyrightYears = year > foundedYear ? `${foundedYear}–${year}` : founded
         </p>
         <p class="footer__email">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
-          <a href="mailto:info@velinareformer.mk" @click="trackContactClick('footer_email')">info@velinareformer.mk</a>
+          <a href="mailto:velinareformer@gmail.com" @click="trackContactClick('footer_email')">velinareformer@gmail.com</a>
         </p>
       </div>
 
