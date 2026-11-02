@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { trackPageView } from '../utils/analytics'
 
 const routes = [
   {
@@ -61,13 +60,10 @@ const router = createRouter({
 })
 
 // Basic SEO: keep the document title in sync with the active route.
-// Also reports the navigation to GA4 as a page_view — gtag's own automatic
-// page_view (fired once, on initial script load) is disabled in
-// initAnalytics() specifically so this is the only source of page_view
-// events, covering every route change including the first.
+// (Page views need nothing here — Umami tracks route changes on its own,
+// see utils/analytics.js.)
 router.afterEach((to) => {
   document.title = to.meta.title || 'Velina Reformer'
-  trackPageView(to.fullPath, to.meta.title)
 })
 
 export default router

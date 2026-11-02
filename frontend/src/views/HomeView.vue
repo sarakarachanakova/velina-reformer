@@ -6,6 +6,7 @@ import InstructorCard from '../components/InstructorCard.vue'
 import GalleryGrid from '../components/GalleryGrid.vue'
 import EventCard from '../components/EventCard.vue'
 import CTASection from '../components/CTASection.vue'
+import CountdownPopup from '../components/CountdownPopup.vue'
 import { pages } from '../content/pages'
 import { instructors as allInstructors } from '../content/instructors'
 import { gallery } from '../content/gallery'
@@ -80,6 +81,8 @@ const events = allEvents.filter((event) => event.id === FEATURED_EVENT_ID)
       </section>
 
       <CTASection :text="page.content.ctaText" />
+
+      <CountdownPopup :target-date="page.content.countdownTarget" />
     </template>
   </DefaultLayout>
 </template>

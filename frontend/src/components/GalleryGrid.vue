@@ -1,8 +1,8 @@
 <script setup>
-import { nextTick, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { trackGalleryOpen } from '../utils/analytics'
 
-defineProps({
+const props = defineProps({
   images: { type: Array, required: true },
   // 2 (default) matches the full Gallery page; 3 is used on the landing
   // page preview for smaller, denser thumbnails on mobile.
@@ -21,6 +21,17 @@ async function openImage(image) {
 
 function closeImage() {
   selectedImage.value = null
+}
+
+// Only images that can actually open in the lightbox (placeholders can't).
+const viewableImages = computed(() => props.images.filter((image) => image.image_url))
+
+// Moves to the previous (-1) or next (+1) photo, wrapping around at the ends.
+function showAdjacent(step) {
+  const list = viewableImages.value
+  // Match by id: selectedImage holds a reactive proxy, so indexOf would never find it.
+  const current = list.findIndex((image) => image.id === selectedImage.value.id)
+  selectedImage.value = list[(current + step + list.length) % list.length]
 }
 </script>
 
@@ -64,9 +75,29 @@ function closeImage() {
       tabindex="-1"
       @click.self="closeImage"
       @keydown.esc="closeImage"
+      @keydown.left="showAdjacent(-1)"
+      @keydown.right="showAdjacent(1)"
     >
       <button type="button" class="gallery-lightbox__close" aria-label="Close image" @click="closeImage">×</button>
-      <img :src="selectedImage.image_url" :alt="selectedImage.alt_text || selectedImage.title" />
+      <div v-if="viewableImages.length > 1" class="gallery-lightbox__nav-group">
+        <button
+          type="button"
+          class="gallery-lightbox__nav"
+          aria-label="Previous image"
+          @click="showAdjacent(-1)"
+        >‹</button>
+        <button
+          type="button"
+          class="gallery-lightbox__nav"
+          aria-label="Next image"
+          @click="showAdjacent(1)"
+        >›</button>
+      </div>
+      <img
+        :key="selectedImage.id"
+        :src="selectedImage.image_url"
+        :alt="selectedImage.alt_text || selectedImage.title"
+      />
     </div>
   </Teleport>
 </template>
@@ -122,7 +153,8 @@ function closeImage() {
 
 .gallery-lightbox img {
   max-width: min(100%, 1100px);
-  max-height: calc(100vh - 4rem);
+  /* Leaves room below for the prev/next buttons. */
+  max-height: calc(100vh - 11rem);
   object-fit: contain;
   border-radius: var(--radius);
   animation: lightbox-pop-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -150,6 +182,7 @@ function closeImage() {
 
 .gallery-lightbox__close {
   position: absolute;
+  z-index: 1;
   top: var(--space-sm);
   right: var(--space-sm);
   width: 2.75rem;
@@ -164,6 +197,34 @@ function closeImage() {
 }
 
 .gallery-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* z-index keeps the buttons above the photo, whose pop-in transform would
+   otherwise paint it on top of them. */
+.gallery-lightbox__nav-group {
+  position: absolute;
+  z-index: 1;
+  bottom: var(--space-sm);
+  left: 50%;
+  display: flex;
+  gap: var(--space-sm);
+  transform: translateX(-50%);
+}
+
+.gallery-lightbox__nav {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  background: rgba(20, 25, 20, 0.35);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.gallery-lightbox__nav:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 </style>

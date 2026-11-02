@@ -78,7 +78,6 @@ const pad = (n) => String(n).padStart(2, '0')
   display: flex;
   justify-content: center;
   gap: var(--space-sm);
-  flex-wrap: wrap;
 }
 
 .countdown__unit {
@@ -196,14 +195,26 @@ const pad = (n) => String(n).padStart(2, '0')
   }
 }
 
+/* Phones: the four units share the row equally and shrink to fit, so they
+   never wrap onto a second line. */
 @media (max-width: 480px) {
+  .countdown__grid {
+    gap: 0.4rem;
+  }
+
   .countdown__unit {
-    min-width: 76px;
-    padding: var(--space-xs) var(--space-sm);
+    flex: 1 1 0;
+    min-width: 0;
+    padding: var(--space-xs) 0.25rem;
   }
 
   .countdown__value {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .countdown__label {
+    font-size: 0.6rem;
+    letter-spacing: 0.03em;
   }
 }
 </style>

@@ -1,74 +1,48 @@
-// Google Analytics 4 (GA4) helper — thin wrapper around Google's gtag.js.
+// Umami analytics helper — thin wrapper around Umami Cloud's tracker script.
+// Dashboard: https://cloud.umami.is (cookieless, so no consent banner needed).
 //
-// The Measurement ID comes from an env var (VITE_GA_MEASUREMENT_ID, see
-// .env.example) rather than being hardcoded here, so it can differ per
-// environment and never lives in source control. If it isn't set, GA is
-// never loaded and every exported function below is a harmless no-op — so
-// this module is always safe to import, including in local dev.
+// The Website ID isn't a secret: it ships in every visitor's page source
+// either way, so it's hardcoded here rather than passed in through an env var.
+// `data-domains` makes the tracker ignore every host except the live site, so
+// local dev (`npm run dev`) and `npm run preview` never send data.
 //
 // Usage:
 //   - initAnalytics() once, before the app mounts (see main.js).
-//   - trackPageView() is wired into the router's afterEach (see router/index.js)
-//     to report SPA navigations, since gtag's own automatic page_view (which
-//     only fires once, on script load) can't see Vue Router transitions.
-//   - trackEvent() / the named trackXClick() helpers below for custom events.
-//     Prefer adding a new named helper over calling trackEvent directly from
-//     a component, so event names and params stay consistent in one place.
+//   - Page views need no code: Umami's script reports the initial load and
+//     hooks history.pushState, so it already sees Vue Router navigations.
+//   - The named trackXClick() helpers below for custom events. Prefer adding
+//     a new named helper over calling trackEvent directly from a component,
+//     so event names and params stay consistent in one place.
 
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
+const UMAMI_WEBSITE_ID = '88e9bd96-0819-45ed-8b95-fee56391a764'
+const TRACKED_DOMAINS = 'velinareformer.mk,www.velinareformer.mk'
 
 let initialized = false
 
-function gtag(...args) {
-  window.dataLayer?.push(args)
+/** Loads Umami's tracker script. Safe to call multiple times — only runs once. */
+export function initAnalytics() {
+  if (initialized || typeof window === 'undefined') return
+  initialized = true
+
+  const script = document.createElement('script')
+  script.defer = true
+  script.src = 'https://cloud.umami.is/script.js'
+  script.dataset.websiteId = UMAMI_WEBSITE_ID
+  script.dataset.domains = TRACKED_DOMAINS
+  document.head.appendChild(script)
 }
 
 /**
- * Loads the Google tag (gtag.js) and configures GA4. Call once, before the
- * first route renders. Safe to call multiple times — only runs once.
- *
- * `send_page_view: false` because this is a single-page app: without it,
- * gtag would send one page_view for the initial script load, and then
- * trackPageView() would send another for the same route on the router's
- * first afterEach — a duplicate. Disabling the automatic one and always
- * sending page_view ourselves, on every route change including the first,
- * keeps it to exactly one per navigation.
+ * Generic custom-event helper. A no-op until the tracker has loaded (or when
+ * an ad blocker stops it loading at all), so it's always safe to call.
  */
-export function initAnalytics() {
-  if (initialized || !GA_MEASUREMENT_ID || typeof window === 'undefined') return
-  initialized = true
-
-  window.dataLayer = window.dataLayer || []
-  window.gtag = gtag
-
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
-  document.head.appendChild(script)
-
-  gtag('js', new Date())
-  gtag('config', GA_MEASUREMENT_ID, { send_page_view: false })
-}
-
-/** Sends a page_view for the given route. Called from the router's afterEach. */
-export function trackPageView(path, title) {
-  if (!GA_MEASUREMENT_ID) return
-  gtag('event', 'page_view', {
-    page_path: path,
-    page_title: title,
-    page_location: window.location.href,
-  })
-}
-
-/** Generic custom-event helper for anything not covered by a named helper below. */
 export function trackEvent(name, params = {}) {
-  if (!GA_MEASUREMENT_ID) return
-  gtag('event', name, params)
+  window.umami?.track(name, params)
 }
 
 // Named helpers for the specific interactions the studio wants tracked.
 // `location` identifies where on the site the click happened (e.g. "footer",
-// "contact_page") so the events stay distinguishable in GA4 reports.
+// "contact_page") so the events stay distinguishable in Umami's Events report.
 export const trackPhoneClick = (location) => trackEvent('phone_click', { link_location: location })
 export const trackInstagramClick = (location) => trackEvent('instagram_click', { link_location: location })
 export const trackMapsClick = (location) => trackEvent('maps_click', { link_location: location })

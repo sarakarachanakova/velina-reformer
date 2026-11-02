@@ -20,6 +20,11 @@ export const pages = {
         'Reformer Pilates е современ метод на вежбање кој ги комбинира контролираното движење, правилното дишење, силата, флексибилноста и стабилноста на телото. Се изведува на специјална справа наречена Reformer, која преку подвижна платформа, пружини и ремени овозможува различни вежби со прилагодлив отпор.\n\n' +
         'За разлика од класичните тренинзи, Reformer Pilates става акцент на квалитетот на движењето, правилната техника и свесното активирање на мускулите. Секоја вежба има своја цел — од зајакнување на мускулатурата и подобрување на држењето на телото, до зголемување на подвижноста, рамнотежата и координацијата.',
       ctaText: 'Подготвени сте да го искусите Реформер Пилатес? Контактирајте го нашето студио.',
+      // Pop-up countdown shown when visitors land on the home page; it stops
+      // appearing once this moment has passed. Keep the +01:00 offset
+      // (North Macedonia winter time, CET) — without it the countdown would
+      // use each visitor's own time zone instead of Macedonian time.
+      countdownTarget: '2026-11-06T18:00:00+01:00',
     },
   },
   about: {
