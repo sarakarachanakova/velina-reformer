@@ -5,7 +5,7 @@
 export const instructors = [
   {
     id: 1,
-    name: 'Данела Велинска',
+    name: 'Даниела Велинска',
     role: 'Lead Instructor',
     bio: 'Сертифициран Реформер Пилатес инструктор, посветена на правилно движење, сила и баланс.',
     image_url: '/instruktori/daniela-instruktor.jpeg',

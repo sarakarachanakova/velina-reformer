@@ -17,7 +17,7 @@ class InstructorSeeder extends Seeder
     {
         $instructors = [
             [
-                'name' => 'Данела Велинска',
+                'name' => 'Даниела Велинска',
                 'role' => 'Lead Instructor',
                 // 'bio' => 'Bio to be provided by the client.',
                 'image_url' => null,
